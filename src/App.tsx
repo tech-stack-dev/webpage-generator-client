@@ -9,12 +9,14 @@ export const App = () => {
   const [generatedData, setGenerationData] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
 
-    const formDataObject = Object.fromEntries(formData.entries());
+    const formDataObject: { [key: string]: FormDataEntryValue | string[] } =
+      Object.fromEntries(formData.entries());
 
     formDataObject.prompts = inputs;
 
