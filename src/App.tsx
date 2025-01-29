@@ -55,7 +55,6 @@ export const App = () => {
           className="form-input"
           id="serviceType"
           name="serviceType"
-          defaultValue="Artificial Intelligence Development Services"
         />
 
         <label className="input-label" htmlFor="basePage">
@@ -65,7 +64,6 @@ export const App = () => {
           className="form-input"
           id="basePage"
           name="basePage"
-          defaultValue="https://tech-stack.com/services/artificial-intelligence"
         />
 
         <label className="input-label" htmlFor="structurePage">
@@ -75,7 +73,6 @@ export const App = () => {
           className="form-input"
           id="structurePage"
           name="structurePage"
-          defaultValue="Service-oriented"
         />
 
         <label className="input-label" htmlFor="minTextSize">
@@ -96,7 +93,6 @@ export const App = () => {
           className="form-input"
           id="keywords"
           name="keywords"
-          defaultValue="AI development, machine learning, deep learning, Warsaw"
         />
 
         <label className="input-label" htmlFor="metaTitle">
@@ -106,7 +102,6 @@ export const App = () => {
           className="form-input"
           id="metaTitle"
           name="metaTitle"
-          defaultValue="Artificial Intelligence Development Services in Warsaw"
         />
 
         <label className="input-label" htmlFor="metaDescription">
@@ -116,7 +111,6 @@ export const App = () => {
           className="form-input"
           id="metaDescription"
           name="metaDescription"
-          defaultValue="Elevate your Warsaw-based business with our AI development services, including machine learning, deep learning, and predictive analytics."
         />
 
         <label className="input-label" htmlFor="geo">
@@ -126,7 +120,6 @@ export const App = () => {
           className="form-input"
           id="geo"
           name="geo"
-          defaultValue="Warsaw"
         />
 
         <label className="input-label" htmlFor="slug">
@@ -136,7 +129,6 @@ export const App = () => {
           className="form-input"
           id="slug"
           name="slug"
-          defaultValue="artificial-intelligence-development-warsaw"
         />
 
         <Prompts inputs={inputs} setInputs={setInputs} />
