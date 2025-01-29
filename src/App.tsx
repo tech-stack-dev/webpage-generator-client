@@ -83,7 +83,6 @@ export const App = () => {
           id="minTextSize"
           name="minTextSize"
           type="number"
-          defaultValue="500"
         />
 
         <label className="input-label" htmlFor="keywords">
