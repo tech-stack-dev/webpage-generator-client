@@ -49,7 +49,7 @@ export const App = () => {
       <Toaster />
       <form className="form" onSubmit={handleSubmit}>
         <label className="input-label" htmlFor="serviceType">
-          Service Type
+          serviceType
         </label>
         <input
           className="form-input"
@@ -58,7 +58,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="basePage">
-          Base Page
+          basePage
         </label>
         <textarea
           className="form-input"
@@ -67,7 +67,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="structurePage">
-          Structure Page
+          structurePage
         </label>
         <textarea
           className="form-input"
@@ -76,7 +76,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="minTextSize">
-          Min Text Size
+          minTextSize
         </label>
         <input
           className="form-input"
@@ -86,7 +86,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="keywords">
-          Keywords
+          keywords
         </label>
         <input
           className="form-input"
@@ -95,7 +95,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="metaTitle">
-          Meta Title
+          metaTitle
         </label>
         <input
           className="form-input"
@@ -104,7 +104,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="metaDescription">
-          Meta Description
+          metaDescription
         </label>
         <textarea
           className="form-input"
@@ -113,7 +113,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="geo">
-          Geo
+          geo
         </label>
         <input
           className="form-input"
@@ -122,7 +122,7 @@ export const App = () => {
         />
 
         <label className="input-label" htmlFor="slug">
-          Slug
+          slug
         </label>
         <input
           className="form-input"
