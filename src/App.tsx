@@ -1,134 +1,190 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import { Prompts } from './components/Prompts';
 import { GeneratedData } from './components/GeneratedData';
 import toast, { Toaster } from 'react-hot-toast';
+import { generatePage } from './utils/utils';
+import { CreateGeneratedPageDto } from './utils/types';
+import { useForm, SubmitHandler } from 'react-hook-form';
 
-export const App = () => {
-  const [inputs, setInputs] = useState(['']);
-  const [generatedData, setGenerationData] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+interface FormValues {
+  serviceType: string;
+  basePage: string;
+  structurePage: string;
+  minTextSize: number;
+  keywords: string;
+  metaTitle: string;
+  metaDescription: string;
+  geo: string;
+  slug: string;
+}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const handleSubmit = async (e: any) => {
-    e.preventDefault();
+export const App: React.FC = () => {
+  const [inputs, setInputs] = useState<string[]>(['']);
+  const [generatedData, setGenerationData] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const formData = new FormData(e.target);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
 
-    const formDataObject: { [key: string]: FormDataEntryValue | string[] } =
-      Object.fromEntries(formData.entries());
-
-    formDataObject.prompts = inputs;
+  const onSubmit: SubmitHandler<FormValues> = async (data) => {
+    const formDataObject: CreateGeneratedPageDto = {
+      serviceType: data.serviceType,
+      basePage: data.basePage,
+      structurePage: data.structurePage,
+      minTextSize: data.minTextSize,
+      keywords: data.keywords,
+      metaTitle: data.metaTitle,
+      metaDescription: data.metaDescription,
+      geo: data.geo,
+      slug: data.slug,
+      prompts: inputs,
+    };
 
     const toastId = toast.loading('Generating...');
     try {
       setIsLoading(true);
 
-      const res = await fetch('http://localhost:3000/generated-page', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formDataObject),
-      });
+      const generated = await generatePage(inputs, formDataObject);
+      setGenerationData(generated);
 
-      const responseData = await res.json();
-      setGenerationData(responseData.generatedPage);
+      toast.success('Page generated successfully!', { id: toastId });
     } catch (error) {
       console.error(error);
       toast.error('An error occurred! Try again', {
+        id: toastId,
         duration: 3000,
       });
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
-    toast.remove(toastId);
   };
 
   return (
     <>
       <Toaster />
-      <form className="form" onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit(onSubmit)}>
         <label className="input-label" htmlFor="serviceType">
-          serviceType
+          %serviceType%
         </label>
         <input
           className="form-input"
           id="serviceType"
-          name="serviceType"
+          {...register('serviceType', { required: 'Service Type is required' })}
         />
+        {errors.serviceType && (
+          <span className="error-message">{errors.serviceType.message}</span>
+        )}
 
         <label className="input-label" htmlFor="basePage">
-          basePage
+          %basePage%
         </label>
         <textarea
           className="form-input"
           id="basePage"
-          name="basePage"
+          {...register('basePage', { required: 'Base Page is required' })}
         />
+        {errors.basePage && (
+          <span className="error-message">{errors.basePage.message}</span>
+        )}
 
         <label className="input-label" htmlFor="structurePage">
-          structurePage
+          %structurePage%
         </label>
         <textarea
           className="form-input"
           id="structurePage"
-          name="structurePage"
+          {...register('structurePage', {
+            required: 'Structure Page is required',
+          })}
         />
+        {errors.structurePage && (
+          <span className="error-message">{errors.structurePage.message}</span>
+        )}
 
         <label className="input-label" htmlFor="minTextSize">
-          minTextSize
+          %minTextSize%
         </label>
         <input
           className="form-input"
           id="minTextSize"
-          name="minTextSize"
           type="number"
+          {...register('minTextSize', {
+            required: 'Minimum Text Size is required',
+            valueAsNumber: true,
+            min: { value: 1, message: 'Minimum Text Size must be at least 1' },
+          })}
         />
+        {errors.minTextSize && (
+          <span className="error-message">{errors.minTextSize.message}</span>
+        )}
 
         <label className="input-label" htmlFor="keywords">
-          keywords
+          %keywords%
         </label>
         <input
           className="form-input"
           id="keywords"
-          name="keywords"
+          {...register('keywords', { required: 'Keywords are required' })}
         />
+        {errors.keywords && (
+          <span className="error-message">{errors.keywords.message}</span>
+        )}
 
         <label className="input-label" htmlFor="metaTitle">
-          metaTitle
+          %metaTitle%
         </label>
         <input
           className="form-input"
           id="metaTitle"
-          name="metaTitle"
+          {...register('metaTitle', { required: 'Meta Title is required' })}
         />
+        {errors.metaTitle && (
+          <span className="error-message">{errors.metaTitle.message}</span>
+        )}
 
         <label className="input-label" htmlFor="metaDescription">
-          metaDescription
+          %metaDescription%
         </label>
         <textarea
           className="form-input"
           id="metaDescription"
-          name="metaDescription"
+          {...register('metaDescription', {
+            required: 'Meta Description is required',
+          })}
         />
+        {errors.metaDescription && (
+          <span className="error-message">
+            {errors.metaDescription.message}
+          </span>
+        )}
 
         <label className="input-label" htmlFor="geo">
-          geo
+          %geo%
         </label>
         <input
           className="form-input"
           id="geo"
-          name="geo"
+          {...register('geo', { required: 'Geo is required' })}
         />
+        {errors.geo && (
+          <span className="error-message">{errors.geo.message}</span>
+        )}
 
         <label className="input-label" htmlFor="slug">
-          slug
+          %slug%
         </label>
         <input
           className="form-input"
           id="slug"
-          name="slug"
+          {...register('slug', { required: 'Slug is required' })}
         />
+        {errors.slug && (
+          <span className="error-message">{errors.slug.message}</span>
+        )}
 
         <Prompts inputs={inputs} setInputs={setInputs} />
 
@@ -140,9 +196,11 @@ export const App = () => {
             opacity: isLoading ? '0.5' : '1',
           }}
         >
-          Submit
+          {isLoading ? 'Generating...' : 'Submit'}
         </button>
       </form>
+
+      {/* Generated Data Display */}
       <GeneratedData data={generatedData} />
     </>
   );
