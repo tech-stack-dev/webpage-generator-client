@@ -3,7 +3,6 @@ import './App.css';
 import { Prompts } from './components/Prompts';
 import { GeneratedData } from './components/GeneratedData';
 import toast, { Toaster } from 'react-hot-toast';
-import { generatePage } from './utils/utils';
 import { CreateGeneratedPageDto } from './utils/types';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
@@ -35,7 +34,7 @@ export const App: React.FC = () => {
       serviceType: data.serviceType,
       basePage: data.basePage,
       structurePage: data.structurePage,
-      minTextSize: data.minTextSize,
+      minTextSize: String(data.minTextSize),
       keywords: data.keywords,
       metaTitle: data.metaTitle,
       metaDescription: data.metaDescription,
@@ -48,8 +47,24 @@ export const App: React.FC = () => {
     try {
       setIsLoading(true);
 
-      const generated = await generatePage(inputs, formDataObject);
-      setGenerationData(generated);
+      const response = await fetch(
+        'https://webpage-gen-back-production.up.railway.app/generated-page',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formDataObject),
+        }
+      );
+
+      if (!response.ok) {
+        toast.error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const generated = await response.json();
+
+      setGenerationData(JSON.stringify(generated.generatedPage, null, 2));
 
       toast.success('Page generated successfully!', { id: toastId });
     } catch (error) {
