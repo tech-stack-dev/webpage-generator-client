@@ -22,7 +22,7 @@ jobs:
 
       - name: Build project
         env:
-          OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
+          VITE_OPENAI_API_KEY: ${{ secrets.VITE_OPENAI_API_KEY }}
         run: npm run build
 
       - name: Upload production-ready build files
