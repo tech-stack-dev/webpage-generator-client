@@ -64,7 +64,7 @@ export const App: React.FC = () => {
 
       const generated = await response.json();
 
-      setGenerationData(JSON.stringify(generated.generatedPage, null, 2));
+      setGenerationData(generated.generatedPage);
 
       toast.success('Page generated successfully!', { id: toastId });
     } catch (error) {
