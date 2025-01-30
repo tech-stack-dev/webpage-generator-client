@@ -66,7 +66,11 @@ export const App: React.FC = () => {
   return (
     <>
       <Toaster />
-      <form className="form" onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="form"
+        autoComplete="off"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <label className="input-label" htmlFor="serviceType">
           %serviceType%
         </label>
