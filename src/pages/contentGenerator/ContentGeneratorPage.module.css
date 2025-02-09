@@ -1,0 +1,21 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas:
+    'form generatedHeroSectionContent'
+    'form generatedMainContent';
+  grid-template-rows: 1fr 1fr;
+}
+
+.generatedContentSection {
+  padding: 0.5em;
+  border: 1px solid;
+}
+
+.generatedHeroSectionContent {
+  grid-area: 'heroSectionContent';
+}
+
+.generatedMainContent {
+  grid-area: 'generatedMainContent';
+}

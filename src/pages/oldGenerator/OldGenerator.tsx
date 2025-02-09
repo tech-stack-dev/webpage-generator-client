@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import './App.css';
+import React, { useState } from 'react';
+import './OldGenerator.css';
 import { Prompts } from '@components/Prompts';
 import { GeneratedData } from '@components/GeneratedData';
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,7 +17,8 @@ interface FormValues {
   geo: string;
   slug: string;
 }
-export const GenerateContentForm = () => {
+
+export const OldGenerator: React.FC = () => {
   const [inputs, setInputs] = useState<string[]>(['']);
   const [generatedData, setGenerationData] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);

@@ -1,0 +1,12 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputField {
+  padding: 0.5em;
+}
+
+.label {
+  font-weight: bold;
+}

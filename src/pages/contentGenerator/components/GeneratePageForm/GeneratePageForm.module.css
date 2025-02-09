@@ -1,0 +1,7 @@
+.generatePageForm {
+  display: flex;
+  flex-direction: column;
+  grid-area: form;
+  padding: 1em;
+  gap: 0.5em;
+}

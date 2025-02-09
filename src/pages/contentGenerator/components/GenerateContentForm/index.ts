@@ -1,1 +1,0 @@
-export { GenerateContentForm } from './GenerateContentForm';

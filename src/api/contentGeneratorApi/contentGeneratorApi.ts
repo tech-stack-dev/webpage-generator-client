@@ -1,10 +1,11 @@
 import { baseApi } from '../baseApi';
+import { PageGenerationRequest, PageGenerationResponse } from './types';
 
 const contentGeneratorApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
-    generateContent: build.mutation({
+    generatePage: build.mutation<PageGenerationResponse, PageGenerationRequest>({
       query: (body) => ({
-        url: 'generated-page',
+        url: 'generated-page/generate',
         method: 'POST',
         body,
       }),
@@ -12,4 +13,4 @@ const contentGeneratorApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useGenerateContentMutation } = contentGeneratorApi;
+export const { useGeneratePageMutation } = contentGeneratorApi;
