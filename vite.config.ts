@@ -16,5 +16,5 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-  base: '/',
+  base: '/webpage-generator-client/',
 });
