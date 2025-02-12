@@ -3,6 +3,10 @@
   flex-direction: column;
 }
 
+.textareaStyle {
+  padding: 0.5rem;
+}
+
 .label {
   font-weight: bold;
 }

@@ -1,21 +1,19 @@
 .container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-    'form generatedHeroSectionContent'
-    'form generatedMainContent';
-  grid-template-rows: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.generatedContentSection {
-  padding: 0.5em;
-  border: 1px solid;
+.formWrapper {
+  min-width: 50%;
+  padding: 1rem;
+  align-self: center;
 }
 
-.generatedHeroSectionContent {
-  grid-area: 'heroSectionContent';
-}
-
-.generatedMainContent {
-  grid-area: 'generatedMainContent';
+.outputsWrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding: 0 1rem 1rem 1rem;
+  gap: 1rem;
 }

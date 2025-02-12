@@ -1,0 +1,19 @@
+.text {
+  border: 1px solid #808080;
+  height: fit-content;
+  max-height: 40rem;
+  overflow: auto;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
+}
+
+.charactersCount {
+  font-weight: bold;
+  font-size: 20px;
+  padding: 0.5rem;
+}
+
+.titleStyle {
+  font-weight: bold;
+  font-size: 20px;
+}

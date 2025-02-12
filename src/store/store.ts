@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, Store } from '@reduxjs/toolkit';
+import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import { baseApi } from '../api/baseApi';
 import { generatedPageReducer } from './slices/generatePageSlice';
 
@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
   generatedPageSlice: generatedPageReducer,
 });
 
-export const store: Store = configureStore({
+export const store = configureStore({
   reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(middlewares),

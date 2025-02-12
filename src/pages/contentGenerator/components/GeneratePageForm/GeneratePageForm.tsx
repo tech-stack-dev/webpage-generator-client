@@ -10,6 +10,8 @@ import {
   saveGeneratedPage,
 } from '@/store/slices/generatePageSlice';
 import { useAppDispatch } from '@/store/hooks';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 type Inputs = {
   serviceType: string;
@@ -28,6 +30,7 @@ type Inputs = {
 };
 
 export const GeneratePageForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [generatePage] = useGeneratePageMutation();
   const dispatch = useAppDispatch();
   const { register, handleSubmit, control } = useForm<Inputs>({
@@ -38,7 +41,6 @@ export const GeneratePageForm = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(data);
     const heroSectionPrompts = data.heroContentPrompts.map(
       (prompt) => prompt.value
     );
@@ -56,33 +58,48 @@ export const GeneratePageForm = () => {
       metaTitle: data.metaTitle,
       serviceType: data.serviceType,
       slug: data.slug,
+      breadcrumb: data.breadcrumb,
       structurePage: data.structurePage,
       minTextSize: data.minTextSize,
       heroContentPrompts: heroSectionPrompts,
       mainContentPrompts: mainContentPrompts,
     };
 
+    setIsLoading(true);
+    const loadingToastId = toast.loading('Generating');
     try {
-      const result = await generatePage(request).unwrap();
-      const page: IGeneratedPage = {
-        breadcrumb: '',
-        heroContent: result.generatedHeroContent,
-        heroTitle: data.heroSectionTitle,
-        mainContent: result.generatedMainContent,
-        metaDescription: data.metaDescription,
-        metaTitle: data.metaTitle,
-        name: 'test',
-        slug: data.slug,
-      };
+      const { data: result } = await generatePage(request);
 
-      dispatch(saveGeneratedPage(page));
+      if (result) {
+        const page: IGeneratedPage = {
+          breadcrumb: data.breadcrumb,
+          heroContent: result.generatedHeroContent,
+          heroTitle: data.heroSectionTitle,
+          mainContent: result.generatedMainContent,
+          metaDescription: data.metaDescription,
+          metaTitle: data.metaTitle,
+          name: 'test',
+          slug: data.slug,
+        };
+        dispatch(saveGeneratedPage(page));
+        toast.success('Generated successfully', {
+          duration: 3000,
+        });
+      }
     } catch (error) {
       console.log(error);
+      toast.error('An error occurred');
     }
+    setIsLoading(false);
+    toast.remove(loadingToastId);
   };
 
   return (
-    <form className={styles.generatePageForm} onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className={styles.generatePageForm}
+      onSubmit={handleSubmit(onSubmit)}
+      autoComplete="off"
+    >
       <InputField
         label="%serviceType%"
         placeholder="AI development"
@@ -146,7 +163,13 @@ export const GeneratePageForm = () => {
         control={control}
         register={register}
       />
-      <button type="submit">Submit</button>
+      <button
+        disabled={isLoading}
+        className={styles.submitButton}
+        type="submit"
+      >
+        Submit
+      </button>
     </form>
   );
 };

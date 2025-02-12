@@ -26,6 +26,7 @@ export const TextareaField = forwardRef<
         placeholder={placeholder}
         ref={ref}
         {...rest}
+        className={styles.textareaStyle}
       />
       {error && <p>{error}</p>}
     </div>

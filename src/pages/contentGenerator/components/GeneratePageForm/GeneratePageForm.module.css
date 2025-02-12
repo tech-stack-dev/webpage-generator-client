@@ -4,4 +4,24 @@
   grid-area: form;
   padding: 1em;
   gap: 0.5em;
+  border: 2px solid #eff0f1;
+  border-radius: 12px;
+  box-shadow: 5px 5px 5px 0 #eff0f1;
+}
+
+.submitButton {
+  background-color: blue;
+  color: white;
+  border: none;
+  border-radius: 2px;
+  padding: 0.5rem 0 0.5rem 0;
+}
+
+.submitButton:hover {
+  cursor: pointer;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
