@@ -10,3 +10,7 @@
 .label {
   font-weight: bold;
 }
+
+.errorStyle {
+  color: red;
+}

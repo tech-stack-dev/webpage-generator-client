@@ -2,7 +2,7 @@ export interface PageGenerationRequest {
   serviceType: string;
   basePage: string;
   structurePage: string;
-  minTextSize: number;
+  minTextSize: string;
   keywords: string;
   metaTitle: string;
   metaDescription: string;

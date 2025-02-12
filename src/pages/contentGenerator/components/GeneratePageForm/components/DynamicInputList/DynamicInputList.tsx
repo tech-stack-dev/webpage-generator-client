@@ -9,6 +9,7 @@ interface DynamicInputListProps {
   register: UseFormRegister<any>;
   name: string;
   title: string;
+  error?: string;
 }
 
 export const DynamicInputList: FC<DynamicInputListProps> = ({
@@ -16,6 +17,7 @@ export const DynamicInputList: FC<DynamicInputListProps> = ({
   register,
   name,
   title,
+  error,
 }) => {
   const { fields, remove, append } = useFieldArray({
     control,
@@ -71,6 +73,7 @@ export const DynamicInputList: FC<DynamicInputListProps> = ({
           </button>
         </div>
       ))}
+      {error && <p className={styles.errorStyle}>{error}*</p>}
     </div>
   );
 };

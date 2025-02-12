@@ -30,7 +30,7 @@ export const InputField = forwardRef<HTMLInputElement, IInputFieldProps>(
           ref={ref}
           {...rest}
         />
-        {error && <p>{error}</p>}
+        {error && <p className={styles.errorStyle}>{error}*</p>}
       </div>
     );
   }

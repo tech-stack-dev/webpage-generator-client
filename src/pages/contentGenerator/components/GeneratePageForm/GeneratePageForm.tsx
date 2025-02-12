@@ -12,6 +12,8 @@ import {
 import { useAppDispatch } from '@/store/hooks';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from './schema';
 
 type Inputs = {
   serviceType: string;
@@ -33,7 +35,14 @@ export const GeneratePageForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatePage] = useGeneratePageMutation();
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, control } = useForm<Inputs>({
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<Inputs>({
+    resolver: yupResolver(schema),
+    mode: 'onSubmit',
     defaultValues: {
       contentPrompts: [{ value: '' }],
       heroContentPrompts: [{ value: '' }],
@@ -41,6 +50,7 @@ export const GeneratePageForm = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    console.log(errors);
     const heroSectionPrompts = data.heroContentPrompts.map(
       (prompt) => prompt.value
     );
@@ -60,7 +70,7 @@ export const GeneratePageForm = () => {
       slug: data.slug,
       breadcrumb: data.breadcrumb,
       structurePage: data.structurePage,
-      minTextSize: data.minTextSize,
+      minTextSize: String(data.minTextSize),
       heroContentPrompts: heroSectionPrompts,
       mainContentPrompts: mainContentPrompts,
     };
@@ -104,64 +114,81 @@ export const GeneratePageForm = () => {
         label="%serviceType%"
         placeholder="AI development"
         {...register('serviceType')}
+        error={errors.serviceType?.message}
       />
       <TextareaField
         label="%basePage%"
         placeholder="Enter base page"
         {...register('basePage')}
+        error={errors.basePage?.message}
       />
       <TextareaField
         label="%structurePage%"
         placeholder="Enter structure details"
         {...register('structurePage')}
+        error={errors.structurePage?.message}
       />
       <InputField
         label="%minTextSize%"
         type="number"
         placeholder="3000"
         {...register('minTextSize')}
+        error={errors.minTextSize?.message}
       />
       <InputField
         label="%keywords%"
         placeholder="Enter relevant keywords"
         {...register('keywords')}
+        error={errors.keywords?.message}
       />
       <InputField
         label="%metaTitle%"
         placeholder="Enter meta title"
         {...register('metaTitle')}
+        error={errors.metaTitle?.message}
       />
       <TextareaField
         label="%metaDescription%"
         placeholder="Enter meta description"
         {...register('metaDescription')}
+        error={errors.metaDescription?.message}
       />
-      <InputField label="%geo%" placeholder="New York" {...register('geo')} />
+      <InputField
+        label="%geo%"
+        placeholder="New York"
+        {...register('geo')}
+        error={errors.geo?.message}
+      />
       <InputField
         label="%slug%"
         placeholder="best-ai-development-services"
         {...register('slug')}
+        error={errors.slug?.message}
       />
       <InputField
         label="%breadcrumb%"
         placeholder="AI development in New York"
         {...register('breadcrumb')}
+        error={errors.breadcrumb?.message}
       />
       <DynamicInputList
         title="Main content prompts"
         control={control}
         name="contentPrompts"
         register={register}
+        error={errors.contentPrompts?.message}
       />
       <InputField
         label="%heroSectionTitle%"
         {...register('heroSectionTitle')}
+        error={errors.heroSectionTitle?.message}
       />
       <DynamicInputList
         title="Hero content prompts"
         name="heroContentPrompts"
         control={control}
         register={register}
+        error={errors.heroContentPrompts?.message}
       />
       <button
         disabled={isLoading}

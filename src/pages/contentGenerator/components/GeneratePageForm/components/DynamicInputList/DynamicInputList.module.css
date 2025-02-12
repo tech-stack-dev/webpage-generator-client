@@ -28,3 +28,7 @@
 .addTextareaButton:hover {
   cursor: pointer;
 }
+
+.errorStyle {
+  color: red;
+}

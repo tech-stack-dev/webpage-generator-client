@@ -28,7 +28,7 @@ export const TextareaField = forwardRef<
         {...rest}
         className={styles.textareaStyle}
       />
-      {error && <p>{error}</p>}
+      {error && <p className={styles.errorStyle}>{error}*</p>}
     </div>
   );
 });
