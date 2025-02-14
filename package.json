@@ -1,6 +1,6 @@
 {
   "name": "web-gen-client",
-  "homepage": "https://ahalai-techstack.github.io/webpage-generator-client/",
+  "homepage": ".",
   "private": true,
   "version": "0.0.0",
   "type": "module",
