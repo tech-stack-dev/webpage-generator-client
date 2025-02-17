@@ -16,6 +16,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from './schema';
 
 type Inputs = {
+  name: string;
   serviceType: string;
   basePage: string;
   structurePage: string;
@@ -88,7 +89,7 @@ export const GeneratePageForm = () => {
           mainContent: result.generatedMainContent,
           metaDescription: data.metaDescription,
           metaTitle: data.metaTitle,
-          name: 'test',
+          name: data.name,
           slug: data.slug,
         };
         dispatch(saveGeneratedPage(page));
@@ -110,6 +111,12 @@ export const GeneratePageForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       autoComplete="off"
     >
+      <InputField
+        label="Name"
+        placeholder="My website"
+        {...register('name')}
+        error={errors.name?.message}
+      />
       <InputField
         label="%serviceType%"
         placeholder="AI development"

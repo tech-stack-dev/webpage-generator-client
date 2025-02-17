@@ -3,6 +3,7 @@ import {
   PageGenerationRequest,
   PageGenerationResponse,
   SaveToAirtableRequest,
+  WebpageRecord,
 } from './types';
 
 const contentGeneratorApi = baseApi.injectEndpoints({
@@ -23,8 +24,13 @@ const contentGeneratorApi = baseApi.injectEndpoints({
         body,
       }),
     }),
+    getPages: build.query<WebpageRecord[], void>({
+      query: () => ({
+        url: 'generated-page/records',
+      }),
+    }),
   }),
 });
 
-export const { useGeneratePageMutation, useSaveToAirtableMutation } =
+export const { useGeneratePageMutation, useSaveToAirtableMutation, useGetPagesQuery } =
   contentGeneratorApi;

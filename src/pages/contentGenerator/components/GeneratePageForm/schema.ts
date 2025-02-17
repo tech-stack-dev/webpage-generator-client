@@ -1,6 +1,7 @@
 import * as yup from 'yup';
 
 export const schema = yup.object({
+  name: yup.string().required('Service type is required'),
   serviceType: yup.string().required('Service type is required'),
   basePage: yup.string().required('Base page is required'),
   structurePage: yup.string().required('Structure page is required'),

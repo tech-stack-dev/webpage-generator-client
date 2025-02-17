@@ -21,18 +21,24 @@ export interface PageGenerationResponse {
 
 export interface SaveToAirtableRequest {
   name: string;
-
   mainContent: string;
-
   metaTitle: string;
-
   metaDescription: string;
-
   slug: string;
-
   breadcrumb: string;
-
   heroTitle: string;
-
   heroContent: string;
+}
+
+export interface WebpageRecord {
+  breadcrumb: string;
+  metaTitle: string;
+  metaDescription: string;
+  heroTitle: string;
+  mainContent: string;
+  slug: string;
+  Name: string;
+  heroContent: string;
+  Status?: string;
+  Test?: string;
 }
