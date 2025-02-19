@@ -42,3 +42,7 @@ export interface WebpageRecord {
   Status?: string;
   Test?: string;
 }
+
+export interface SaveToWebflowRequest {
+  name: string;
+}

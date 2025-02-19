@@ -29,8 +29,19 @@ const contentGeneratorApi = baseApi.injectEndpoints({
         url: 'generated-page/records',
       }),
     }),
+    saveToWebflow: build.mutation({
+      query: (body) => ({
+        url: 'generated-page/save-to-webflow',
+        method: 'POST',
+        body: body,
+      }),
+    }),
   }),
 });
 
-export const { useGeneratePageMutation, useSaveToAirtableMutation, useGetPagesQuery } =
-  contentGeneratorApi;
+export const {
+  useGeneratePageMutation,
+  useSaveToAirtableMutation,
+  useGetPagesQuery,
+  useSaveToWebflowMutation,
+} = contentGeneratorApi;
