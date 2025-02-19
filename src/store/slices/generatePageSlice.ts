@@ -27,7 +27,7 @@ export const generatedPageSlice = createSlice({
   initialState: generatedPageInitialState,
   reducers: {
     saveGeneratedPage(state, { payload }: PayloadAction<IGeneratedPage>) {
-      state.name = 'test';
+      state.name = payload.name;
       state.mainContent = payload.mainContent;
       state.metaTitle = payload.metaTitle;
       state.metaDescription = payload.metaDescription;
