@@ -4,7 +4,11 @@ import { Link, Outlet } from 'react-router';
 export const App = () => {
   return (
     <div>
-      <nav>
+      <nav
+        style={{
+          padding: '10px',
+        }}
+      >
         <Link to="publish">Publish</Link>
       </nav>
       <Outlet />

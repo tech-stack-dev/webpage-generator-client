@@ -5,13 +5,13 @@ import {
   useSaveToWebflowMutation,
 } from '@/api/contentGeneratorApi/contentGeneratorApi';
 import { SaveToWebflowRequest } from '@/api/contentGeneratorApi/types';
-import toast from 'react-hot-toast';
+import { toast, Toaster } from 'react-hot-toast';
 
 export const PublishPage = () => {
   const { data: pages, isLoading } = useGetPagesQuery();
   const [saveToWebflow] = useSaveToWebflowMutation();
+  const [isSaving, setIsSaving] = useState(false);
 
-  // Store selected item in state
   const [selectedPage, setSelectedPage] = useState<{
     value: string;
     label: string;
@@ -30,22 +30,41 @@ export const PublishPage = () => {
   };
 
   const onClick = async () => {
-    if (!selectedPage) {
-      toast('Please select a page before publishing.', {
+    if (!selectedPage?.value) {
+      toast.error('Please select a page before publishing.', {
         duration: 3000,
       });
       return;
     }
 
+    const toastId = toast.loading('Saving');
+    setIsSaving(true);
     const request: SaveToWebflowRequest = {
       name: selectedPage.value,
     };
 
-    await saveToWebflow(request);
+    try {
+      await saveToWebflow(request);
+      toast.success('Published', {
+        duration: 3000,
+      });
+    } catch (error) {
+      toast.error('An error occurred. Try again later');
+    }
+    toast.remove(toastId);
+    setIsSaving(false);
   };
 
   return (
-    <div>
+    <div
+      style={{
+        padding: '1rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '10px',
+      }}
+    >
+      <Toaster />
       <Select
         options={options}
         isLoading={isLoading}
@@ -53,7 +72,14 @@ export const PublishPage = () => {
         onChange={onChange}
         value={selectedPage}
       />
-      <button type="button" onClick={onClick}>
+      <button
+        type="button"
+        onClick={onClick}
+        style={{
+          maxWidth: '300px',
+        }}
+        disabled={isSaving}
+      >
         Publish
       </button>
     </div>

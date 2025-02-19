@@ -40,7 +40,13 @@ export const DynamicInputList: FC<DynamicInputListProps> = ({
             alignItems: 'center',
           }}
         >
-          <p>{title}</p>
+          <p
+            style={{
+              fontWeight: 'bold',
+            }}
+          >
+            {title}
+          </p>
           <button
             type="button"
             onClick={() => append({ value: '' })}

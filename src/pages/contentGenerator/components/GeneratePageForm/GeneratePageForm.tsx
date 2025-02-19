@@ -188,6 +188,7 @@ export const GeneratePageForm = () => {
       <InputField
         label="%heroSectionTitle%"
         {...register('heroSectionTitle')}
+        placeholder='AI development in New York'
         error={errors.heroSectionTitle?.message}
       />
       <DynamicInputList

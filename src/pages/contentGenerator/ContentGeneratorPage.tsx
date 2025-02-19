@@ -34,7 +34,7 @@ export const ContentGeneratorPage = () => {
         duration: 3000,
       });
     } catch (error) {
-      toast.error('Error', {
+      toast.error('An error occurred! Try again later', {
         duration: 3000,
       });
     }
