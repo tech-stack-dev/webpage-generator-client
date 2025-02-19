@@ -5,6 +5,7 @@ import {
   SaveToAirtableRequest,
   WebpageRecord,
 } from './types';
+import { PAGES_TAG } from '../baseApi';
 
 const contentGeneratorApi = baseApi.injectEndpoints({
   endpoints: (build) => ({
@@ -23,11 +24,13 @@ const contentGeneratorApi = baseApi.injectEndpoints({
         method: 'POST',
         body,
       }),
+      invalidatesTags: [PAGES_TAG],
     }),
     getPages: build.query<WebpageRecord[], void>({
       query: () => ({
         url: 'generated-page/records',
       }),
+      providesTags: [PAGES_TAG],
     }),
     saveToWebflow: build.mutation({
       query: (body) => ({

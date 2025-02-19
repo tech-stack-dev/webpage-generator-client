@@ -6,8 +6,11 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: () => {},
 });
 
+export const PAGES_TAG = 'Pages';
+
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: baseQuery,
   endpoints: () => ({}),
+  tagTypes: [PAGES_TAG],
 });
