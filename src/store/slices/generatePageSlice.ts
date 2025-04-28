@@ -9,6 +9,7 @@ export interface IGeneratedPage {
   breadcrumb: string;
   heroTitle: string;
   heroContent: string;
+  wasPageGenerated?: boolean;
 }
 
 const generatedPageInitialState: IGeneratedPage = {
@@ -20,6 +21,7 @@ const generatedPageInitialState: IGeneratedPage = {
   breadcrumb: '',
   heroTitle: '',
   heroContent: '',
+  wasPageGenerated: false,
 };
 
 export const generatedPageSlice = createSlice({
@@ -35,9 +37,17 @@ export const generatedPageSlice = createSlice({
       state.breadcrumb = payload.breadcrumb;
       state.heroTitle = payload.heroTitle;
       state.heroContent = payload.heroContent;
+      state.wasPageGenerated = true;
+    },
+    togglePageGeneratedFlag(
+      state,
+      { payload }: PayloadAction<{ wasPageGenerated: boolean }>,
+    ) {
+      state.wasPageGenerated = payload.wasPageGenerated;
     },
   },
 });
 
-export const { saveGeneratedPage } = generatedPageSlice.actions;
+export const { saveGeneratedPage, togglePageGeneratedFlag } =
+  generatedPageSlice.actions;
 export const generatedPageReducer = generatedPageSlice.reducer;

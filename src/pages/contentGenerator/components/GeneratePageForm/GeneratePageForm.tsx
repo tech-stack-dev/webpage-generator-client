@@ -8,12 +8,18 @@ import { useGeneratePageMutation } from '@/api/contentGeneratorApi/contentGenera
 import {
   IGeneratedPage,
   saveGeneratedPage,
+  togglePageGeneratedFlag,
 } from '@/store/slices/generatePageSlice';
 import { useAppDispatch } from '@/store/hooks';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from './schema';
+import { IS_MVP_COMPLETED } from './constants';
+import { useAppSelector } from '@/store/hooks';
+import { SaveToAirtableRequest } from '@/api/contentGeneratorApi/types';
+import { useSaveToAirtableMutation } from '@/api/contentGeneratorApi/contentGeneratorApi';
+import { store } from '@/store/store';
 
 type Inputs = {
   name: string;
@@ -26,7 +32,7 @@ type Inputs = {
   metaDescription: string;
   geo: string;
   slug: string;
-  breadcrumb: string;
+  breadcrumb?: string;
   contentPrompts: { value: string }[];
   heroSectionTitle: string;
   heroContentPrompts: { value: string }[];
@@ -35,6 +41,8 @@ type Inputs = {
 export const GeneratePageForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatePage] = useGeneratePageMutation();
+  const generatedPage = useAppSelector((state) => state.generatedPageSlice);
+  const [saveToAirtable] = useSaveToAirtableMutation();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -50,14 +58,52 @@ export const GeneratePageForm = () => {
     },
   });
 
+  const afterSubmit = useCallback(async () => {
+    const request: SaveToAirtableRequest = {
+      name: generatedPage.name,
+      breadcrumb: generatedPage.breadcrumb,
+      heroContent: generatedPage.heroContent,
+      heroTitle: generatedPage.heroTitle,
+      mainContent: generatedPage.mainContent,
+      metaDescription: generatedPage.metaDescription,
+      metaTitle: generatedPage.metaTitle,
+      slug: generatedPage.slug,
+    };
+
+    try {
+      await saveToAirtable(request).unwrap();
+      toast.success('Updated airtable', {
+        duration: 3000,
+      });
+    } catch (error) {
+      console.log('Save to airtable failed due to:', error);
+      toast.error('An error occurred! Try again later', {
+        duration: 3000,
+      });
+    }
+  }, [
+    generatedPage.breadcrumb,
+    generatedPage.heroContent,
+    generatedPage.heroTitle,
+    generatedPage.mainContent,
+    generatedPage.metaDescription,
+    generatedPage.metaTitle,
+    generatedPage.name,
+    generatedPage.slug,
+    saveToAirtable,
+  ]);
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log(errors);
+    console.log(
+      'Errors during validation of the schema values occured:',
+      errors,
+    );
     const heroSectionPrompts = data.heroContentPrompts.map(
-      (prompt) => prompt.value
+      (prompt) => prompt.value,
     );
 
     const mainContentPrompts = data.contentPrompts.map(
-      (prompt) => prompt.value
+      (prompt) => prompt.value,
     );
 
     const request: PageGenerationRequest = {
@@ -69,7 +115,7 @@ export const GeneratePageForm = () => {
       metaTitle: data.metaTitle,
       serviceType: data.serviceType,
       slug: data.slug,
-      breadcrumb: data.breadcrumb,
+      breadcrumb: data.breadcrumb || '',
       structurePage: data.structurePage,
       minTextSize: String(data.minTextSize),
       heroContentPrompts: heroSectionPrompts,
@@ -83,7 +129,7 @@ export const GeneratePageForm = () => {
 
       if (result) {
         const page: IGeneratedPage = {
-          breadcrumb: data.breadcrumb,
+          breadcrumb: data.breadcrumb || '',
           heroContent: result.generatedHeroContent,
           heroTitle: data.heroSectionTitle,
           mainContent: result.generatedMainContent,
@@ -104,6 +150,21 @@ export const GeneratePageForm = () => {
     setIsLoading(false);
     toast.remove(loadingToastId);
   };
+
+  useEffect(() => {
+    const currentState = store.getState();
+
+    if (!isLoading && currentState.generatedPageSlice.wasPageGenerated) {
+      try {
+        (async () => {
+          await afterSubmit();
+        })();
+        dispatch(togglePageGeneratedFlag({ wasPageGenerated: false }));
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  }, [generatedPage, afterSubmit, isLoading, dispatch]);
 
   return (
     <form
@@ -172,12 +233,16 @@ export const GeneratePageForm = () => {
         {...register('slug')}
         error={errors.slug?.message}
       />
-      <InputField
-        label="%breadcrumb%"
-        placeholder="AI development in New York"
-        {...register('breadcrumb')}
-        error={errors.breadcrumb?.message}
-      />
+      {IS_MVP_COMPLETED ? (
+        <InputField
+          label="%breadcrumb%"
+          placeholder="AI development in New York"
+          {...register('breadcrumb')}
+          error={errors.breadcrumb?.message}
+        />
+      ) : (
+        <></>
+      )}
       <DynamicInputList
         title="Main content prompts"
         control={control}
@@ -188,7 +253,7 @@ export const GeneratePageForm = () => {
       <InputField
         label="%heroSectionTitle%"
         {...register('heroSectionTitle')}
-        placeholder='AI development in New York'
+        placeholder="AI development in New York"
         error={errors.heroSectionTitle?.message}
       />
       <DynamicInputList
