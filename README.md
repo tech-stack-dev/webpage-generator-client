@@ -2,7 +2,7 @@
 
 Frontend service of the TSWebPageGenerator, responsible for the UI and use of our backend API,
 which contains main functionality.
-Utilizes pure React@19.1.0 + Vite, RTK for state management, RTK-Query for data fetching.
+Utilizes pure React@19.1.0 + Vite, RTK for state management, RTK-Query for data fetching, React-router for routing.
 
 ## Prerequisites
 
