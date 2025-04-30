@@ -1,50 +1,45 @@
-# React + TypeScript + Vite
+# TSWEB-GENERATOR
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Frontend service of the TSWebPageGenerator, responsible for the UI and use of our backend API,
+which contains main functionality.
+Utilizes pure React@19.1.0 + Vite, RTK for state management, RTK-Query for data fetching.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Make sure that Node.js and PNPM are installed
+  - https://nodejs.org/en/download/
+  - https://pnpm.io/installation#using-corepack
+- Node version >= 20.x (locally latest LTS 22.15.0 was observed to work without any hiccups)
 
-## Expanding the ESLint configuration
+## Dependencies installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+$ pnpm install
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Preparation
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- Check .env.local file, which contains placeholders for the actual environment values needed for running an app
+  and connection to all related services. After obtaining the needed values for environment variables,
+  create a new .env (.gitignored to not accidentally leak keys) file & paste the placeholders with corresponding
+  values into it.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+## Run the project locally
+
+```bash
+# start in watch-mode
+$ pnpm run dev
+```
+
+## Building and running in production environment:
+
+```bash
+# build && then serve from something like Cloudfront or hand-crafted file-server :d
+$ pnpm run build
+```
+
+## Testing
+
+```bash
+# In construction
 ```
