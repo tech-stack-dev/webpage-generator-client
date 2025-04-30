@@ -1,11 +1,11 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { createApi } from '@reduxjs/toolkit/query/react';
 
-console.log('URL', import.meta.env.VITE_PUBLIC_API_URL);
+// FIX: must be changed after migration to AWS in favor of VITE_PUBLIC_API_URL
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: import.meta.env.VITE_PUBLIC_API_URL,
-  prepareHeaders: () => {},
+  baseUrl: import.meta.env.VITE_BASE_URL,
+  prepareHeaders: () => { },
 });
 
 // NOTE: tag used for caching and its invalidation of API-requests
