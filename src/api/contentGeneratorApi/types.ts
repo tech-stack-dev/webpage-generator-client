@@ -17,6 +17,11 @@ export interface PageGenerationRequest {
 export interface PageGenerationResponse {
   generatedMainContent: string;
   generatedHeroContent: string;
+  metaTitle: string;
+  metaDescription: string;
+  keywords: string;
+  slug: string;
+  heroSectionTitle: string;
 }
 
 export interface SaveToAirtableRequest {
