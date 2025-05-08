@@ -17,6 +17,9 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
 
+      - name: Install dependencies
+        run: npm install
+
       - name: Build project
         env:
           VITE_OPENAI_API_KEY: ${{ vars.VITE_OPENAI_API_KEY }}
