@@ -8,18 +8,13 @@ import { useGeneratePageMutation } from '@/api/contentGeneratorApi/contentGenera
 import {
   IGeneratedPage,
   saveGeneratedPage,
-  togglePageGeneratedFlag,
 } from '@/store/slices/generatePageSlice';
 import { useAppDispatch } from '@/store/hooks';
-import { useCallback, useEffect, useState } from 'react';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from './schema';
 import { IS_MVP_COMPLETED } from './constants';
-import { useAppSelector } from '@/store/hooks';
-import { SaveToAirtableRequest } from '@/api/contentGeneratorApi/types';
-import { useSaveToAirtableMutation } from '@/api/contentGeneratorApi/contentGeneratorApi';
-import { store } from '@/store/store';
 
 type Inputs = {
   name: string;
@@ -41,8 +36,6 @@ type Inputs = {
 export const GeneratePageForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatePage] = useGeneratePageMutation();
-  const generatedPage = useAppSelector((state) => state.generatedPageSlice);
-  const [saveToAirtable] = useSaveToAirtableMutation();
   const dispatch = useAppDispatch();
   const {
     register,
@@ -72,6 +65,7 @@ export const GeneratePageForm = () => {
     );
 
     const request: PageGenerationRequest = {
+      name: data.name,
       basePage: data.basePage,
       geo: data.geo,
       keywords: data.keywords,
@@ -90,6 +84,7 @@ export const GeneratePageForm = () => {
     setIsLoading(true);
     const loadingToastId = toast.loading('Generating');
     try {
+      console.log('Request to generate page:', request);
       const { data: result } = await generatePage(request);
 
       // NOTE: getting some data from service as placeholders were replaced with actual values
@@ -106,7 +101,7 @@ export const GeneratePageForm = () => {
           geo: data.geo,
         };
         dispatch(saveGeneratedPage(page));
-        toast.success('Generated successfully', {
+        toast.success('Generated and saved to database successfully', {
           duration: 3000,
         });
       }
@@ -117,60 +112,6 @@ export const GeneratePageForm = () => {
     setIsLoading(false);
     toast.remove(loadingToastId);
   };
-
-  // NOTE: useCallback 'cause afterSubmit is used as dependency in useEffect, so it's better to memorize
-  // in order to not change the reference during re-renders
-  const afterSubmit = useCallback(async () => {
-    const request: SaveToAirtableRequest = {
-      name: generatedPage.name,
-      geo: generatedPage.geo,
-      breadcrumb: generatedPage.breadcrumb,
-      heroContent: generatedPage.heroContent,
-      heroTitle: generatedPage.heroTitle,
-      mainContent: generatedPage.mainContent,
-      metaDescription: generatedPage.metaDescription,
-      metaTitle: generatedPage.metaTitle,
-      slug: generatedPage.slug,
-    };
-
-    try {
-      await saveToAirtable(request).unwrap();
-      toast.success('Updated airtable', {
-        duration: 3000,
-      });
-    } catch (error) {
-      console.log('Save to airtable failed due to:', error);
-      toast.error('An error occurred! Try again later', {
-        duration: 3000,
-      });
-    }
-  }, [
-    generatedPage.breadcrumb,
-    generatedPage.heroContent,
-    generatedPage.heroTitle,
-    generatedPage.mainContent,
-    generatedPage.metaDescription,
-    generatedPage.metaTitle,
-    generatedPage.name,
-    generatedPage.slug,
-    generatedPage.geo,
-    saveToAirtable,
-  ]);
-
-  useEffect(() => {
-    const currentState = store.getState();
-
-    if (!isLoading && currentState.generatedPageSlice.wasPageGenerated) {
-      try {
-        (async () => {
-          await afterSubmit();
-        })();
-        dispatch(togglePageGeneratedFlag({ wasPageGenerated: false }));
-      } catch (err) {
-        console.log(err);
-      }
-    }
-  }, [generatedPage, afterSubmit, isLoading, dispatch]);
 
   return (
     <form

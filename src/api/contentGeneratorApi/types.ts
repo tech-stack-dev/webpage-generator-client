@@ -12,6 +12,7 @@ export interface PageGenerationRequest {
   mainContentPrompts: string[];
   heroSectionTitle: string;
   heroContentPrompts: string[];
+  name: string;
 }
 
 export interface PageGenerationResponse {
@@ -22,18 +23,6 @@ export interface PageGenerationResponse {
   keywords: string;
   slug: string;
   heroSectionTitle: string;
-}
-
-export interface SaveToAirtableRequest {
-  name: string;
-  mainContent: string;
-  metaTitle: string;
-  metaDescription: string;
-  slug: string;
-  breadcrumb: string;
-  heroTitle: string;
-  heroContent: string;
-  geo: string;
 }
 
 export interface WebpageRecord {
