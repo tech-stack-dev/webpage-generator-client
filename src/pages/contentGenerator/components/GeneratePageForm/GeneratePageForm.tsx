@@ -61,14 +61,14 @@ export const GeneratePageForm = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(
       'Errors during validation of the schema values occured:',
-      errors,
+      errors
     );
     const heroSectionPrompts = data.heroContentPrompts.map(
-      (prompt) => prompt.value,
+      (prompt) => prompt.value
     );
 
     const mainContentPrompts = data.contentPrompts.map(
-      (prompt) => prompt.value,
+      (prompt) => prompt.value
     );
 
     const request: PageGenerationRequest = {
@@ -103,6 +103,7 @@ export const GeneratePageForm = () => {
           metaTitle: result.metaTitle,
           name: data.name,
           slug: result.slug,
+          geo: data.geo,
         };
         dispatch(saveGeneratedPage(page));
         toast.success('Generated successfully', {
@@ -122,6 +123,7 @@ export const GeneratePageForm = () => {
   const afterSubmit = useCallback(async () => {
     const request: SaveToAirtableRequest = {
       name: generatedPage.name,
+      geo: generatedPage.geo,
       breadcrumb: generatedPage.breadcrumb,
       heroContent: generatedPage.heroContent,
       heroTitle: generatedPage.heroTitle,
@@ -151,6 +153,7 @@ export const GeneratePageForm = () => {
     generatedPage.metaTitle,
     generatedPage.name,
     generatedPage.slug,
+    generatedPage.geo,
     saveToAirtable,
   ]);
 

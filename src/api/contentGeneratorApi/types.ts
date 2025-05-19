@@ -33,6 +33,7 @@ export interface SaveToAirtableRequest {
   breadcrumb: string;
   heroTitle: string;
   heroContent: string;
+  geo: string;
 }
 
 export interface WebpageRecord {
