@@ -10,6 +10,7 @@ export interface IGeneratedPage {
   heroTitle: string;
   heroContent: string;
   wasPageGenerated?: boolean;
+  geo: string;
 }
 
 const generatedPageInitialState: IGeneratedPage = {
@@ -22,6 +23,7 @@ const generatedPageInitialState: IGeneratedPage = {
   heroTitle: '',
   heroContent: '',
   wasPageGenerated: false,
+  geo: '',
 };
 
 export const generatedPageSlice = createSlice({
@@ -38,10 +40,11 @@ export const generatedPageSlice = createSlice({
       state.heroTitle = payload.heroTitle;
       state.heroContent = payload.heroContent;
       state.wasPageGenerated = true;
+      state.geo = payload.geo;
     },
     togglePageGeneratedFlag(
       state,
-      { payload }: PayloadAction<{ wasPageGenerated: boolean }>,
+      { payload }: PayloadAction<{ wasPageGenerated: boolean }>
     ) {
       state.wasPageGenerated = payload.wasPageGenerated;
     },

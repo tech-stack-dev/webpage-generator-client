@@ -2,7 +2,6 @@ import { baseApi } from '../baseApi';
 import {
   PageGenerationRequest,
   PageGenerationResponse,
-  SaveToAirtableRequest,
   WebpageRecord,
 } from './types';
 import { PAGES_TAG } from '../baseApi';
@@ -18,14 +17,6 @@ const contentGeneratorApi = baseApi.injectEndpoints({
         }),
       }
     ),
-    saveToAirtable: build.mutation<string, SaveToAirtableRequest>({
-      query: (body) => ({
-        url: 'generated-page/save-to-airtable',
-        method: 'POST',
-        body,
-      }),
-      invalidatesTags: [PAGES_TAG],
-    }),
     getPages: build.query<WebpageRecord[], void>({
       query: () => ({
         url: 'generated-page/records',
@@ -44,7 +35,6 @@ const contentGeneratorApi = baseApi.injectEndpoints({
 
 export const {
   useGeneratePageMutation,
-  useSaveToAirtableMutation,
   useGetPagesQuery,
   useSaveToWebflowMutation,
 } = contentGeneratorApi;
