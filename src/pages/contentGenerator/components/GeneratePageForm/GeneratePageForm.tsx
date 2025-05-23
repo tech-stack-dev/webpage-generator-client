@@ -174,6 +174,10 @@ export const GeneratePageForm = () => {
         {...register('geo')}
         error={errors.geo?.message}
       />
+      <div className={styles.fieldHint}>
+        Enter locations separated by commas without spaces (e.g.,
+        California,London,Berlin)
+      </div>
       <InputField
         label="%slug%"
         placeholder="best-ai-development-services"
