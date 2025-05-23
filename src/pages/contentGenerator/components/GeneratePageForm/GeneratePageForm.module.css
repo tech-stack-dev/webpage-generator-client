@@ -25,3 +25,8 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+.fieldHint {
+  font-size: 0.8rem;
+  color: #666;
+}
