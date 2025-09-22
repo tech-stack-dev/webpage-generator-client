@@ -9,6 +9,7 @@ interface DynamicInputListProps {
   register: UseFormRegister<any>;
   name: string;
   title: string;
+  placeholder: string;
   error?: string;
 }
 
@@ -17,6 +18,7 @@ export const DynamicInputList: FC<DynamicInputListProps> = ({
   register,
   name,
   title,
+  placeholder,
   error,
 }) => {
   const { fields, remove, append } = useFieldArray({
@@ -69,6 +71,7 @@ export const DynamicInputList: FC<DynamicInputListProps> = ({
             key={field.id}
             {...register(`${name}.${index}.value`)}
             className={styles.textareaStyle}
+            placeholder={placeholder}
           />
           <button
             type="button"
