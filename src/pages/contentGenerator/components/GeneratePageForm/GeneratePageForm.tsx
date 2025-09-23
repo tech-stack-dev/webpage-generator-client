@@ -54,14 +54,14 @@ export const GeneratePageForm = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(
       'Errors during validation of the schema values occured:',
-      errors
+      errors,
     );
     const heroSectionPrompts = data.heroContentPrompts.map(
-      (prompt) => prompt.value
+      (prompt) => prompt.value,
     );
 
     const mainContentPrompts = data.contentPrompts.map(
-      (prompt) => prompt.value
+      (prompt) => prompt.value,
     );
 
     const request: PageGenerationRequest = {
@@ -121,56 +121,79 @@ export const GeneratePageForm = () => {
     >
       <InputField
         label="Name"
-        placeholder="My website"
+        placeholder="AI Dev Services (4 New States)"
         {...register('name')}
         error={errors.name?.message}
       />
+      <div className={styles.fieldHint}>
+        Record name for quick search in table
+      </div>
       <InputField
         label="%serviceType%"
         placeholder="AI development"
         {...register('serviceType')}
         error={errors.serviceType?.message}
       />
-      <TextareaField
-        label="%basePage%"
-        placeholder="Enter base page"
-        {...register('basePage')}
-        error={errors.basePage?.message}
-      />
-      <TextareaField
-        label="%structurePage%"
-        placeholder="Enter structure details"
-        {...register('structurePage')}
-        error={errors.structurePage?.message}
-      />
+      <div className={styles.fieldHint}>Clearly defined service type</div>
       <InputField
-        label="%minTextSize%"
-        type="number"
-        placeholder="3000"
-        {...register('minTextSize')}
-        error={errors.minTextSize?.message}
+        label="%slug%"
+        placeholder="ai-development-in-%geo%"
+        {...register('slug')}
+        error={errors.slug?.message}
       />
-      <InputField
-        label="%keywords%"
-        placeholder="Enter relevant keywords"
-        {...register('keywords')}
-        error={errors.keywords?.message}
-      />
+      <div className={styles.fieldHint}>
+        Write service type manually (ai-development-in). Use %geo% variable for
+        location
+      </div>
       <InputField
         label="%metaTitle%"
-        placeholder="Enter meta title"
+        placeholder="AI Development Company in %geo% | Techstack"
         {...register('metaTitle')}
         error={errors.metaTitle?.message}
       />
+      <div className={styles.fieldHint}>
+        Must include service and %geo% variable for location
+      </div>
       <TextareaField
         label="%metaDescription%"
-        placeholder="Enter meta description"
+        placeholder="Techstack offers AI Development services in %geo%, focusing on developing solutions."
         {...register('metaDescription')}
         error={errors.metaDescription?.message}
       />
+      <div className={styles.fieldHint}>
+        Write service manually, not through variable %serviceType%
+      </div>
+      <TextareaField
+        label="%structurePage%"
+        placeholder="H2 Our Services in %geo%, H3 Case Study by Techstack,etc."
+        {...register('structurePage')}
+        error={errors.structurePage?.message}
+      />
+      <div className={styles.fieldHint}>
+        DO NOT add H1. Can use %geo% variables
+      </div>
+      <InputField
+        label="%minTextSize%"
+        type="number"
+        placeholder="15000"
+        {...register('minTextSize')}
+        error={errors.minTextSize?.message}
+      />
+      <div className={styles.fieldHint}>
+        Minimum character count for SEO (doesn't always work perfectly)
+      </div>
+      <InputField
+        label="%keywords%"
+        placeholder="ai development company in %geo%, ai software development company in %geo%"
+        {...register('keywords')}
+        error={errors.keywords?.message}
+      />
+      <div className={styles.fieldHint}>
+        Comma-separated keywords with dynamic geo variables (%geo%)
+      </div>
       <InputField
         label="%geo%"
-        placeholder="New York"
+        placeholder="California,Texas,NewYork"
         {...register('geo')}
         error={errors.geo?.message}
       />
@@ -179,11 +202,42 @@ export const GeneratePageForm = () => {
         California,London,Berlin)
       </div>
       <InputField
-        label="%slug%"
-        placeholder="best-ai-development-services"
-        {...register('slug')}
-        error={errors.slug?.message}
+        label="%heroSectionTitle%"
+        {...register('heroSectionTitle')}
+        placeholder="AI Development in %geo%"
+        error={errors.heroSectionTitle?.message}
       />
+      <div className={styles.fieldHint}>
+        Write service type manually, only %geo% as variable.
+      </div>
+      <TextareaField
+        label="%basePage%"
+        placeholder="<p>Our engineering-driven team collaborates...</p>"
+        {...register('basePage')}
+        error={errors.basePage?.message}
+      />
+      <div className={styles.fieldHint}>
+        Copy reference page text without changes. Additional case studies can be
+        added after main text
+      </div>
+      <DynamicInputList
+        title="Hero content prompts"
+        name="heroContentPrompts"
+        placeholder="Generate engaging hero content for AI development services"
+        control={control}
+        register={register}
+        error={errors.heroContentPrompts?.message}
+      />
+      <div className={styles.fieldHint}>Insert ready prompt</div>
+      <DynamicInputList
+        title="Main content prompts"
+        control={control}
+        name="contentPrompts"
+        placeholder="Create comprehensive sections about AI development services and case studies"
+        register={register}
+        error={errors.contentPrompts?.message}
+      />
+      <div className={styles.fieldHint}>Insert ready prompt</div>
       {IS_MVP_COMPLETED ? (
         <InputField
           label="%breadcrumb%"
@@ -194,26 +248,6 @@ export const GeneratePageForm = () => {
       ) : (
         <></>
       )}
-      <DynamicInputList
-        title="Main content prompts"
-        control={control}
-        name="contentPrompts"
-        register={register}
-        error={errors.contentPrompts?.message}
-      />
-      <InputField
-        label="%heroSectionTitle%"
-        {...register('heroSectionTitle')}
-        placeholder="AI development in New York"
-        error={errors.heroSectionTitle?.message}
-      />
-      <DynamicInputList
-        title="Hero content prompts"
-        name="heroContentPrompts"
-        control={control}
-        register={register}
-        error={errors.heroContentPrompts?.message}
-      />
       <button
         disabled={isLoading}
         className={styles.submitButton}
