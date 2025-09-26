@@ -54,63 +54,76 @@ export const GeneratePageForm = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log(
       'Errors during validation of the schema values occured:',
-      errors,
+      errors
     );
     const heroSectionPrompts = data.heroContentPrompts.map(
-      (prompt) => prompt.value,
+      (prompt) => prompt.value
     );
 
     const mainContentPrompts = data.contentPrompts.map(
-      (prompt) => prompt.value,
+      (prompt) => prompt.value
     );
 
-    const request: PageGenerationRequest = {
-      name: data.name,
-      basePage: data.basePage,
-      geo: data.geo,
-      keywords: data.keywords,
-      heroSectionTitle: data.heroSectionTitle,
-      metaDescription: data.metaDescription,
-      metaTitle: data.metaTitle,
-      serviceType: data.serviceType,
-      slug: data.slug,
-      breadcrumb: data.breadcrumb || '',
-      structurePage: data.structurePage,
-      minTextSize: String(data.minTextSize),
-      heroContentPrompts: heroSectionPrompts,
-      mainContentPrompts: mainContentPrompts,
-    };
+    const geos = data.geo.split(',').map((geo) => geo.trim());
+
+    if (geos.length < 1) {
+      toast.error('Please enter at least one location in the %geo% field.');
+      return;
+    }
 
     setIsLoading(true);
-    const loadingToastId = toast.loading('Generating');
-    try {
-      console.log('Request to generate page:', request);
-      const { data: result } = await generatePage(request);
 
-      // NOTE: getting some data from service as placeholders were replaced with actual values
-      if (result) {
-        const page: IGeneratedPage = {
-          breadcrumb: data.breadcrumb || '',
-          heroContent: result.generatedHeroContent,
-          heroTitle: result.heroSectionTitle,
-          mainContent: result.generatedMainContent,
-          metaDescription: result.metaDescription,
-          metaTitle: result.metaTitle,
-          name: data.name,
-          slug: result.slug,
-          geo: data.geo,
-        };
-        dispatch(saveGeneratedPage(page));
-        toast.success('Generated and saved to database successfully', {
-          duration: 3000,
-        });
+    for (const geo of geos) {
+      const request: PageGenerationRequest = {
+        name: data.name,
+        basePage: data.basePage,
+        geo: geo,
+        keywords: data.keywords,
+        heroSectionTitle: data.heroSectionTitle,
+        metaDescription: data.metaDescription,
+        metaTitle: data.metaTitle,
+        serviceType: data.serviceType,
+        slug: data.slug,
+        breadcrumb: data.breadcrumb || '',
+        structurePage: data.structurePage,
+        minTextSize: String(data.minTextSize),
+        heroContentPrompts: heroSectionPrompts,
+        mainContentPrompts: mainContentPrompts,
+      };
+
+      const loadingToastId = toast.loading('Generating');
+      try {
+        console.log('Request to generate page:', request);
+        const { data: result } = await generatePage(request);
+
+        console.log('Response from generate page:', result);
+
+        // NOTE: getting some data from service as placeholders were replaced with actual values
+        if (result) {
+          const page: IGeneratedPage = {
+            breadcrumb: data.breadcrumb || '',
+            heroContent: result.generatedHeroContent,
+            heroTitle: result.heroSectionTitle,
+            mainContent: result.generatedMainContent,
+            metaDescription: result.metaDescription,
+            metaTitle: result.metaTitle,
+            name: data.name,
+            slug: result.slug,
+            geo: data.geo,
+          };
+          dispatch(saveGeneratedPage(page));
+          toast.remove(loadingToastId);
+          toast.success('Generated and saved to database successfully', {
+            duration: 3000,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error('An error occurred');
+        toast.remove(loadingToastId);
       }
-    } catch (error) {
-      console.log(error);
-      toast.error('An error occurred');
     }
     setIsLoading(false);
-    toast.remove(loadingToastId);
   };
 
   return (
