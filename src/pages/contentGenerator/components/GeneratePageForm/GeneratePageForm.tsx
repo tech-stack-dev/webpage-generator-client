@@ -64,7 +64,16 @@ export const GeneratePageForm = () => {
       (prompt) => prompt.value
     );
 
-    const geos = data.geo.split(',').map((geo) => geo.trim());
+    const geos = Array.from(
+      new Set(
+        data.geo
+          .split(',')
+          .map((g) => g.trim())
+          .filter(Boolean)
+      )
+    );
+
+    console.log('Geos to generate pages for:', geos);
 
     if (geos.length < 1) {
       toast.error('Please enter at least one location in the %geo% field.');
@@ -73,26 +82,26 @@ export const GeneratePageForm = () => {
 
     setIsLoading(true);
 
-    for (const geo of geos) {
-      const request: PageGenerationRequest = {
-        name: data.name,
-        basePage: data.basePage,
-        geo: geo,
-        keywords: data.keywords,
-        heroSectionTitle: data.heroSectionTitle,
-        metaDescription: data.metaDescription,
-        metaTitle: data.metaTitle,
-        serviceType: data.serviceType,
-        slug: data.slug,
-        breadcrumb: data.breadcrumb || '',
-        structurePage: data.structurePage,
-        minTextSize: String(data.minTextSize),
-        heroContentPrompts: heroSectionPrompts,
-        mainContentPrompts: mainContentPrompts,
-      };
+    try {
+      for (const geo of geos) {
+        const loadingToastId = toast.loading(`Generating ${geo} page...`);
+        const request: PageGenerationRequest = {
+          name: data.name,
+          basePage: data.basePage,
+          geo: geo,
+          keywords: data.keywords,
+          heroSectionTitle: data.heroSectionTitle,
+          metaDescription: data.metaDescription,
+          metaTitle: data.metaTitle,
+          serviceType: data.serviceType,
+          slug: data.slug,
+          breadcrumb: data.breadcrumb || '',
+          structurePage: data.structurePage,
+          minTextSize: String(data.minTextSize),
+          heroContentPrompts: heroSectionPrompts,
+          mainContentPrompts: mainContentPrompts,
+        };
 
-      const loadingToastId = toast.loading('Generating');
-      try {
         console.log('Request to generate page:', request);
         const { data: result } = await generatePage(request);
 
@@ -109,21 +118,21 @@ export const GeneratePageForm = () => {
             metaTitle: result.metaTitle,
             name: data.name,
             slug: result.slug,
-            geo: data.geo,
+            geo,
           };
           dispatch(saveGeneratedPage(page));
-          toast.remove(loadingToastId);
-          toast.success('Generated and saved to database successfully', {
-            duration: 3000,
-          });
         }
-      } catch (error) {
-        console.log(error);
-        toast.error('An error occurred');
         toast.remove(loadingToastId);
+        toast.success(`Generated ${geo} page successfully`, {
+          duration: 3000,
+        });
       }
+    } catch (error) {
+      console.log(error);
+      toast.error('An error occurred');
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   return (
